@@ -9,6 +9,15 @@ cpmfiles/*.CMD and cpmfiles/HELP.HLP are Digital Research's CP/M-86 1.1
 utilities, from the same site (c8611src.zip and the IBM PC CP/M-86 1.1 set,
 cpm86pc.zip).
 
+Also from that site, all Digital Research products:
+  cpmfiles/RASM86, LINK86, LIB86, XREF86 (Programmer's Utilities 1.1) and
+  cpmfiles/B/* (DR C 1.11): drc_86.zip
+  cpmfiles/BASIC.CMD, BASIC.ME (Personal BASIC 1.1): pbasic86.zip
+  cpmfiles/C/* (PL/I-86 1.0): pli86.zip
+  cpmfiles/D/CB86.* and the CBASIC samples (CB86 2.0): cbasic86.zip
+  cpmfiles/D/ASM.COM, LOAD.COM, DUMP.COM: CP/M 2.2 (see pocket8086-cpm)
+The HELLO.C, HELLO.BAS and HELLO80.ASM samples are original (MIT).
+
 CP/M and CP/M-86 are copyright Digital Research. They are distributed under the
 following grant from the owner of the Digital Research assets (posted at
 http://www.cpm.z80.de/license.html, 7 July 2022):

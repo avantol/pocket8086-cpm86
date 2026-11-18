@@ -183,16 +183,32 @@ def main():
     img[0:512] = boot
     img[512:512 + len(system)] = system
 
+    # Files directly in a folder go to A:; a one-letter subfolder (B, C, ...)
+    # goes to that drive.
     folders = a.files or [os.path.join(ROOT, 'cpmfiles'), os.path.join(ROOT, 'extras')]
-    files = []
+    per_drive = {}
     for folder in folders:
-        if os.path.isdir(folder):
-            files += sorted(os.path.join(folder, f) for f in os.listdir(folder)
-                            if os.path.isfile(os.path.join(folder, f)))
-        elif a.files:
-            sys.exit('no such folder: %s' % folder)
-    nent, used = write_files(img, drives[0], files)
-    print('  A: %d files, %d of %d blocks used' % (nent, used, drives[0]['dsm'] + 1))
+        if not os.path.isdir(folder):
+            if a.files:
+                sys.exit('no such folder: %s' % folder)
+            continue
+        for name in sorted(os.listdir(folder)):
+            path = os.path.join(folder, name)
+            if os.path.isfile(path):
+                per_drive.setdefault(0, []).append(path)
+            elif len(name) == 1 and name.isalpha():
+                n = ord(name.upper()) - 65
+                if n >= len(drives):
+                    print('  warning: no drive %s: on this card, skipping %s' % (
+                        name.upper(), path))
+                    continue
+                per_drive.setdefault(n, []).extend(
+                    sorted(os.path.join(path, f) for f in os.listdir(path)
+                           if os.path.isfile(os.path.join(path, f))))
+    for n in sorted(per_drive):
+        nent, used = write_files(img, drives[n], per_drive[n])
+        print('  %s: %d files, %d of %d blocks used' % (
+            chr(65 + n), nent, used, drives[n]['dsm'] + 1))
     with open(a.out, 'wb') as f:
         f.write(img)
     print('Wrote %s (%d sectors)' % (a.out, len(img) // 512))

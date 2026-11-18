@@ -17,19 +17,57 @@ DR's own IBM PC version of CP/M-86 1.1 only supported floppies.
 * About 625K TPA. CP/M-86 uses all conventional memory.
 * The console is a fast ADM-3A / Kaypro II style terminal, the same as in the
   CP/M-80 project.
-* Drive A: comes with DR's CP/M-86 1.1 tools: ASM86, DDT86, ED, GENCMD,
-  GENDEF, HELP, PIP, STAT and SUBMIT, plus a `HELLO86.A86` sample:
+* The card comes loaded with Digital Research software (on a 32 MB card):
+
+| Drive | Contents |
+|-------|----------|
+| A: | CP/M-86 1.1 tools: ASM86, DDT86, ED, GENCMD, GENDEF, HELP, PIP, STAT, SUBMIT. Programmer's Utilities 1.1: RASM86 1.2, LINK86 1.4, LIB86, XREF86. Personal BASIC 1.1 (`BASIC`). `HELLO86.A86` sample. |
+| B: | DR C 1.11 (`DRC`), with small and large model libraries and `HELLO.C` |
+| C: | PL/I-86 1.0 (`PLI`), with DR's sample programs |
+| D: | CBASIC Compiler CB86 2.0, with `HELLO.BAS`; and the CP/M-80 programs ASM, LOAD and DUMP with `HELLO80.ASM`, for VCPM (below) |
 
 ```
-A>ASM86 HELLO86
-A>GENCMD HELLO86
-A>HELLO86
-Hello from CP/M-86 on the Pocket8086!
+A>ASM86 HELLO86                 B>DRC HELLO
+A>GENCMD HELLO86                B>A:LINK86 HELLO,CLEARS.L86[S]
+A>HELLO86                       B>HELLO
+Hello from CP/M-86 ...          Hello from DR C on the Pocket8086!
+
+C>PLI DEMO                      D>CB86 HELLO
+C>A:LINK86 DEMO                 D>A:LINK86 HELLO
+C>DEMO                          D>HELLO
 ```
+
+The CP/M-86 1.1 CCP only looks for programs on the current drive, hence
+`A:LINK86`. On a 4 MB card only A: exists; the other drives' files are
+skipped.
 
 The IBM PC release's hardware-specific utilities (ASSIGN, CONFIG, DSKMAINT,
 FUNCTION, SETUP, TOD) are not included, because they depend on IBM's BIOS or
 floppy hardware. HELP still lists them as topics.
+
+### VCPM: CP/M-80 programs on CP/M-86
+
+[VCPM](http://www.cpm.z80.de/binary.html) (Stephen Hunt, 1988) runs CP/M-80
+`.COM` programs under CP/M-86 by switching the V20/V30 into its 8080 mode, the
+same trick the [pocket8086-cpm](https://github.com/avantol/pocket8086-cpm)
+card uses for a whole system. It has no license statement, so it is not in
+this repository: `python tools/get_vcpm.py` downloads the source into
+`extras/`, and you build it on the machine:
+
+```
+A>ASM86 VCPM $PZSZ
+A>GENCMD VCPM EXTRA[M1000]
+A>D:
+D>A:VCPM ASM HELLO80
+D>A:VCPM LOAD HELLO80
+D>A:VCPM HELLO80
+```
+
+VCPM needs an NEC V20/V30.
+
+The CP/M-80 WordStar 3.30 from pocket8086-cpm (its `tools/get_wordstar.py`,
+Kaypro II install) also runs under VCPM, because both cards use the same
+console codes. Put its files in `extras/D/` and run `A:VCPM WS` from D:.
 
 ## Build and write a card
 
@@ -52,7 +90,9 @@ python tools/cpmfiles.py D: era OLD.CMD
 python tools/cpmfiles.py D: sys build/cpm86.img     # new BIOS, files untouched
 ```
 
-A local `extras/` folder (ignored by git) is also copied onto A: when you build.
+Files in `cpmfiles/` go onto A:, and files in `cpmfiles/B/`, `cpmfiles/C/`
+and so on go onto those drives. A local `extras/` folder (ignored by git) is
+copied the same way.
 
 **Windows offers to "format" the card whenever it is inserted. Always click
 Cancel.**
@@ -89,15 +129,17 @@ the sample `BIOS.A86`/`CBIOS.A86`, `SINGLES.LIB` and `DEBLOCK.LIB`.
 
 ## Testing
 
-Tested in [MartyPC](https://github.com/dbalsom/martypc) on an XT with XT-IDE:
-boot, DIR, STAT, PIP, ED, HELP, ASM86 + GENCMD, and DDT86 trace/go.
+Tested on a real Pocket8086 (NEC V30, 32 MB SD card), including DDT86, and
+in [MartyPC](https://github.com/dbalsom/martypc) on an XT with XT-IDE:
+boot, DIR, STAT, PIP, ED, HELP, ASM86 + GENCMD, and DDT86 trace/go. DR C,
+PL/I-86, CBASIC (each compiled, linked with LINK86 1.4 and run), Personal
+BASIC and VCPM (CP/M-80 ASM, LOAD and the result) were tested in MartyPC.
 
 One emulator caveat: with MartyPC's NEC V20 CPU, DDT86's `T` and `G` commands
 hang. DDT86 starts the program with an `IRET` whose flags word has bit 15
 clear. On a V20/V30, that bit is the MD (8080 mode) flag, and MartyPC
-(0.4.1) lets `IRET` change it. NEC documents MD as write-protected unless
-`BRKEM` enabled it, so real chips should not be affected, and the same test
-works on MartyPC's Intel 8088.
+(0.4.1) lets `IRET` change it. On a real V30, MD is write-protected unless
+`BRKEM` enabled it, and DDT86 works fine. It also works on MartyPC's Intel 8088.
 
 ## Credits and licenses
 
