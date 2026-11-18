@@ -1,0 +1,24 @@
+CP/M-86 material in this repository
+===================================
+
+dr/CPM.H86, dr/BIOS.A86, dr/CBIOS.A86, dr/SINGLES.LIB and dr/DEBLOCK.LIB are
+Digital Research's CP/M-86 1.1 system files (c8611src.zip from the "Unofficial
+CP/M Web Site", http://www.cpm.z80.de/).
+
+cpmfiles/*.CMD and cpmfiles/HELP.HLP are Digital Research's CP/M-86 1.1
+utilities, from the same site (c8611src.zip and the IBM PC CP/M-86 1.1 set,
+cpm86pc.zip).
+
+CP/M and CP/M-86 are copyright Digital Research. They are distributed under the
+following grant from the owner of the Digital Research assets (posted at
+http://www.cpm.z80.de/license.html, 7 July 2022):
+
+  "Let this paragraph represent a right to use, distribute, modify, enhance,
+  and otherwise make available in a nonexclusive manner CP/M and its
+  derivatives. This right comes from the company, DRDOS, Inc.'s purchase of
+  Digital Research, the company and all assets, dating back to the mid-1990's.
+  DRDOS, Inc. and I, Bryan Sparks, President of DRDOS, Inc. as its
+  representative, is the owner of CP/M and the successor in interest of
+  Digital Research assets."
+
+                                        -- Bryan Sparks, President, DRDOS, Inc.

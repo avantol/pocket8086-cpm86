@@ -1,0 +1,6 @@
+* text=auto
+*.COM binary
+*.com binary
+*.png binary
+*.bin binary
+*.img binary

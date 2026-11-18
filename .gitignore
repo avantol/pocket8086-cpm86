@@ -1,0 +1,14 @@
+# build output and disk images
+build/
+*.img
+*.vhd
+
+# third-party tools downloaded locally (see README)
+tools/nasm-*/
+tools/*.zip
+
+# software that is not redistributable, kept locally
+extras/
+
+.claude/settings.local.json
+__pycache__/

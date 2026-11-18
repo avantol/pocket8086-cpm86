@@ -1,0 +1,16 @@
+; HELLO86.A86 - CP/M-86 test program.  Build and run with:
+;     ASM86 HELLO86
+;     GENCMD HELLO86
+;     HELLO86
+	cseg
+	mov	cl,9		;print string
+	mov	dx,offset msg
+	int	224
+	mov	cl,0		;system reset (back to the CCP)
+	mov	dl,0
+	int	224
+
+	dseg
+	org	100h		;skip the base page
+msg	db	'Hello from CP/M-86 on the Pocket8086!',13,10,'$'
+	end

@@ -1,0 +1,26 @@
+[[machine]]
+name = "pocket_test"
+type = "Ibm5160"
+rom_set = "auto"
+speaker = false
+overlays = [
+    "pcxt_2_360k_floppies",
+    "us_modelf_keyboard",
+    "cpu_v20",
+    "xtide",
+]
+
+    [machine.memory]
+    conventional.size = 0xA0000
+    conventional.wait_states = 0
+
+    [[machine.video]]
+    type = "CGA"
+    clock_mode = "Default"
+
+    [machine.hdc]
+    bus_type = "Isa8"
+    type = "XtIde"
+
+        [[machine.hdc.drive]]
+        vhd = "cpmtest.vhd"
